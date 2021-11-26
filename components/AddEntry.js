@@ -104,8 +104,7 @@ const AddEntry = () => {
 
     dispatch(addEntry({[key]: getDailyReminderValue()}));
     /*
-    TODO: 
-        Update Redux store
+    TODO:
         Route to Home
         
     */
