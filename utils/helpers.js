@@ -1,8 +1,9 @@
 import React from 'react';
-import {View} from 'react-native';
+import {View, StyleSheet} from 'react-native';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
+import {white, pink, red, orange, blue, lightPurp} from './colors';
 
 export function isBetween(num, x, y) {
   if (num >= x && num <= y) {
@@ -50,8 +51,8 @@ export function getMetricMetaInfo(metric) {
       type: 'steppers',
       getIcon() {
         return (
-          <View>
-            <MaterialIcons name="directions-run" size={35} color="black" />
+          <View style={[styles.iconContainer, {backgroundColor: red}]}>
+            <MaterialIcons name="directions-run" size={35} color={white} />
           </View>
         );
       },
@@ -64,8 +65,8 @@ export function getMetricMetaInfo(metric) {
       type: 'steppers',
       getIcon() {
         return (
-          <View>
-            <MaterialCommunityIcons name="bike" size={35} color="black" />
+          <View style={[styles.iconContainer, {backgroundColor: orange}]}>
+            <MaterialCommunityIcons name="bike" size={35} color={white} />
           </View>
         );
       },
@@ -78,8 +79,8 @@ export function getMetricMetaInfo(metric) {
       type: 'steppers',
       getIcon() {
         return (
-          <View>
-            <MaterialCommunityIcons name="swim" size={35} color="black" />
+          <View style={[styles.iconContainer, {backgroundColor: blue}]}>
+            <MaterialCommunityIcons name="swim" size={35} color={white} />
           </View>
         );
       },
@@ -92,8 +93,8 @@ export function getMetricMetaInfo(metric) {
       type: 'slider',
       getIcon() {
         return (
-          <View>
-            <FontAwesome5 name="bed" size={35} color="black" />
+          <View style={[styles.iconContainer, {backgroundColor: lightPurp}]}>
+            <FontAwesome5 name="bed" size={35} color={white} />
           </View>
         );
       },
@@ -106,8 +107,8 @@ export function getMetricMetaInfo(metric) {
       type: 'slider',
       getIcon() {
         return (
-          <View>
-            <MaterialCommunityIcons name="food" size={35} color="black" />
+          <View style={[styles.iconContainer, {backgroundColor: pink}]}>
+            <MaterialCommunityIcons name="food" size={35} color={white} />
           </View>
         );
       },
@@ -116,6 +117,18 @@ export function getMetricMetaInfo(metric) {
 
   return typeof metric === 'undefined' ? info : info[metric];
 }
+
+const styles = StyleSheet.create({
+  iconContainer: {
+    padding: 5,
+    borderRadius: 8,
+    width: 50,
+    height: 50,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginRight: 15,
+  },
+});
 
 export function timeToString(time = Date.now()) {
   const date = new Date(time);
@@ -126,7 +139,9 @@ export function timeToString(time = Date.now()) {
 }
 
 export function getDailyReminderValue() {
-  return {
-    today: "👋️ Don't forget to log your data today!",
-  };
+  return [
+    {
+      today: "👋️ Don't forget to log your data today!",
+    },
+  ];
 }
