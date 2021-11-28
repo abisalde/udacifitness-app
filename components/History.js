@@ -30,19 +30,24 @@ class History extends Component {
       .then(() => this.setState(() => ({ready: true})));
   }
 
-  renderItem = ({today, ...metrics}, key) => (
-    <View style={styles.item}>
-      {today ? (
-        <View>
-          <Text style={styles.noDataText}>{today}</Text>
-        </View>
-      ) : (
-        <TouchableOpacity onPress={() => console.log('Pressed!')}>
-          <MetricCard metrics={metrics} />
-        </TouchableOpacity>
-      )}
-    </View>
-  );
+  renderItem = ({today, ...metrics}, formattedDate, key) => {
+    return (
+      <View style={styles.item}>
+        {today ? (
+          <View>
+            <Text style={styles.noDataText}>{JSON.stringify(today)}</Text>
+          </View>
+        ) : (
+          <TouchableOpacity
+            onPress={() =>
+              this.props.navigation.navigate('EntryDetail', {entryId: key})
+            }>
+            <MetricCard metrics={metrics} />
+          </TouchableOpacity>
+        )}
+      </View>
+    );
+  };
 
   renderEmptyDate() {
     return (
@@ -87,7 +92,7 @@ const styles = StyleSheet.create({
     },
   },
   noDataText: {
-    fontSize: 16,
+    fontSize: 15,
     paddingTop: 15,
     paddingBottom: 15,
   },
