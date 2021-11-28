@@ -4,6 +4,7 @@ import {getMetricMetaInfo} from '../utils/helpers';
 import {gray} from '../utils/colors';
 
 const MetricCard = ({metrics}) => {
+  console.log('metrics', metrics);
   return (
     <View style={styles.container}>
       {Object.keys(metrics).map(metric => {
