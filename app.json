@@ -1,4 +1,19 @@
 {
+  "sdkVersion": "30.0.0",
+  "orientation": "potrait",
   "name": "UdaciFitness",
-  "displayName": "UdaciFitness"
+  "displayName": "UdaciFitness",
+  "description": "The best triathlon traning app in the world",
+  "slug": "udacifitness",
+  "version": "1.0.0",
+  "icon": "https://i.imgur.com/tLj9aRp.jpg",
+  "notification": {
+    "icon": "https://i.imgur.com/kFYFoq7.jpg"
+  },
+  "ios": {
+    "bundleIdentifier": "org.udacifitness.exp"
+  },
+  "android": {
+    "package": "org.udacifitness.exp"
+  }
 }

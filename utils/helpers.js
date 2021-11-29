@@ -1,9 +1,13 @@
 import React from 'react';
 import {View, StyleSheet} from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import * as Notifications from 'expo-notifications';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import {white, pink, red, orange, blue, lightPurp} from './colors';
+
+const NOTICATION_KEY = 'UdaciFitness:notifications';
 
 export function isBetween(num, x, y) {
   if (num >= x && num <= y) {
@@ -144,4 +148,61 @@ export function getDailyReminderValue() {
       today: "👋️ Don't forget to log your data today!",
     },
   ];
+}
+
+export function clearLocalNotification() {
+  return AsyncStorage.removeItem(NOTICATION_KEY).then(
+    Notifications.cancelAllScheduledNotificationsAsync,
+  );
+}
+
+function createNotification() {
+  return {
+    title: 'Log your stats!',
+    body: "👋 don't forget to log your stats for today!",
+    ios: {
+      sound: true,
+    },
+    android: {
+      sound: true,
+      priority: 'high',
+      sticky: false,
+      vibrate: true,
+    },
+  };
+}
+
+export function setLocalNotification() {
+  AsyncStorage.getItem(NOTICATION_KEY)
+    .then(JSON.parse)
+    .then(data => {
+      if (data === null) {
+        Notifications.requestPermissionsAsync().then(({status}) => {
+          if (status === 'granted') {
+            Notifications.cancelAllScheduledNotificationsAsync().catch(
+              console.error,
+            );
+
+            Notifications.scheduleNotificationAsync({
+              content: createNotification(),
+              trigger: {
+                hour: 20,
+                minute: 0,
+                repeats: true,
+              },
+            }).catch(console.error);
+
+            Notifications.setNotificationHandler({
+              handleNotification: async () => ({
+                shouldShowAlert: true,
+                shouldPlaySound: false,
+                shouldSetBadge: false,
+              }),
+            });
+
+            AsyncStorage.setItem(NOTICATION_KEY, JSON.stringify(true));
+          }
+        });
+      }
+    });
 }

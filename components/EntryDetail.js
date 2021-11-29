@@ -1,8 +1,21 @@
 import React from 'react';
-import {View, StyleSheet, Text, Platform, TouchableOpacity} from 'react-native';
+import {View, StyleSheet} from 'react-native';
 import {connect} from 'react-redux';
+import MetricCard from './MetricCard';
+import {addEntry} from '../redux/actions';
+import {removeEntry} from '../utils/API';
+import TextButton from './TextButton';
+import {timeToString, getDailyReminderValue} from '../utils/helpers';
 
 class EntryDetail extends React.Component {
+  componentDidMount() {
+    this.setTitle(this.props.route.params.entryId);
+  }
+
+  shouldComponentUpdate(nextProps) {
+    return nextProps.metrics.length !== 0 && !nextProps.metrics[0].today;
+  }
+
   setTitle = entryId => {
     if (!entryId) {
       return;
@@ -16,19 +29,34 @@ class EntryDetail extends React.Component {
     });
   };
 
-  render() {
-    const {entryId, metrics} = this.props;
+  reset = () => {
+    const {remove, goBack, entryId} = this.props;
 
-    this.setTitle(entryId);
+    remove();
+    goBack();
+    removeEntry(entryId);
+  };
+
+  render() {
+    const {metrics} = this.props;
     return (
-      <View>
-        <Text>
-          Entry Detail - {JSON.stringify(this.props.route.params.entryId)}
-        </Text>
+      <View style={styles.container}>
+        <MetricCard metrics={metrics[0]} />
+        <TextButton onPress={this.reset} style={{margin: 20}}>
+          RESET
+        </TextButton>
       </View>
     );
   }
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: '#fff',
+    padding: 15,
+  },
+});
 
 function mapStateToProps(state, {route}) {
   const {entryId} = route.params;
@@ -45,7 +73,7 @@ function mapDispatchToProps(dispatch, {route, navigation}) {
       dispatch(
         addEntry({
           [entryId]:
-            timeToString() === entryId ? getDailyReminderValue() : null,
+            timeToString() === entryId ? getDailyReminderValue() : new Array(),
         }),
       ),
     goBack: () => navigation.goBack(),
