@@ -9,11 +9,5 @@
   "icon": "https://i.imgur.com/tLj9aRp.jpg",
   "notification": {
     "icon": "https://i.imgur.com/kFYFoq7.jpg"
-  },
-  "ios": {
-    "bundleIdentifier": "org.udacifitness.exp"
-  },
-  "android": {
-    "package": "org.udacifitness.exp"
   }
 }
