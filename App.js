@@ -21,6 +21,8 @@ import {purple, white} from './utils/colors';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import Icon from 'react-native-vector-icons/Ionicons';
 import EntryDetail from './components/EntryDetail';
+import Live from './components/Live';
+import {setLocalNotification} from './utils/helpers';
 
 const Tab =
   Platform.OS === 'ios'
@@ -48,6 +50,8 @@ const Home = () => {
             icon = <Icon name="ios-bookmarks" size={20} color={color} />;
           } else if (route.name === 'AddEntry') {
             icon = <FontAwesome5 name="plus-square" size={20} color={color} />;
+          } else if (route.name === 'Live') {
+            icon = <Icon name="ios-speedometer" size={20} color={color} />;
           }
           return icon;
         },
@@ -76,6 +80,11 @@ const Home = () => {
         name="AddEntry"
         component={AddEntry}
         options={{tabBarLabel: 'Add Entry'}}
+      />
+      <Tab.Screen
+        name="Live"
+        component={Live}
+        options={{tabBarLabel: 'Live'}}
       />
     </Tab.Navigator>
   );
@@ -107,6 +116,10 @@ const MainNavigation = () => {
 };
 
 export default class App extends React.Component {
+  componentDidMount() {
+    setLocalNotification();
+  }
+
   render() {
     return (
       <Provider store={createStore(reducer)}>

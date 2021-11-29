@@ -12,6 +12,7 @@ import LoadingApp from './Loading';
 class History extends Component {
   state = {
     ready: false,
+    selectedDate: new Date().toISOString().slice(0, 10),
   };
 
   componentDidMount() {
@@ -30,7 +31,8 @@ class History extends Component {
       .then(() => this.setState(() => ({ready: true})));
   }
 
-  renderItem = ({today, ...metrics}, formattedDate, key) => {
+  renderItem = (key, {today, ...metrics}, firstItemInDay) => {
+    // TODO: KEY returns trues instead of DATE VALUES
     return (
       <View style={styles.item}>
         {today ? (
@@ -60,14 +62,19 @@ class History extends Component {
   }
   render() {
     const {entries} = this.props;
-    const {ready} = this.state;
+    const {ready, selectedDate} = this.state;
     if (!ready) {
       return <LoadingApp />;
     }
     return (
       <UdacitFitnessCalendar
         items={entries}
-        renderItem={this.renderItem}
+        onDayPress={day => {
+          this.setState({selectedDate: day.dateString});
+        }}
+        renderItem={(item, firstItemInDay) =>
+          this.renderItem(selectedDate, item, firstItemInDay)
+        }
         renderEmptyDate={this.renderEmptyDate}
       />
     );
@@ -81,7 +88,7 @@ const styles = StyleSheet.create({
     padding: 20,
     marginLeft: 10,
     marginRight: 10,
-    marginTop: 32,
+    marginTop: 30,
     justifyContent: 'center',
     shadowRadius: 3,
     shadowOpacity: 0.8,

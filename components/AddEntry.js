@@ -4,6 +4,8 @@ import {
   getMetricMetaInfo,
   timeToString,
   getDailyReminderValue,
+  clearLocalNotification,
+  setLocalNotification,
 } from '../utils/helpers';
 import DateHeader from './DateHeader';
 import UdaciSlider from './UdaciSlider';
@@ -74,10 +76,13 @@ class AddEntry extends Component {
     this.setState(() => ({run: 0, bike: 0, swim: 0, sleep: 0, eat: 0}));
 
     // Navigate to home
+    this.toHome();
 
+    // Update the DB
     submitEntry({key, entry});
 
     // Clear local notification
+    clearLocalNotification().then(setLocalNotification);
   };
   reset = () => {
     const key = timeToString();
@@ -89,8 +94,13 @@ class AddEntry extends Component {
     );
 
     // Route to Home
+    this.toHome();
 
     removeEntry(key);
+  };
+
+  toHome = () => {
+    this.props.navigation.goBack();
   };
   render() {
     const metaInfo = getMetricMetaInfo();
@@ -147,7 +157,7 @@ function mapStateToProps(state) {
   const key = timeToString();
 
   return {
-    alreadyLogged: state[key] && typeof state[key].today === 'undefined',
+    alreadyLogged: state[key] && typeof state[key][0].today === 'undefined',
   };
 }
 
